@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, {Suspense, MouseEvent, useState} from 'react';
 import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom";
 
 const AllTasks = React.lazy(() => import('./../Tasks/AllTasks'));
@@ -6,16 +6,19 @@ const ActiveTasks = React.lazy(() => import('./../Tasks/ActiveTasks'));
 const CompletedTasks = React.lazy(() => import('./../Tasks/CompletedTasks'));
 
 function Navigation () {
-	type dog = number;
-	type cat = string;
-
-	type petType = dog | cat;
-
-	let test1: petType = 1;
-	let test2: petType = true;
-
-
 	let setActive = ({isActive} : {isActive: boolean}) => isActive ? "tasks-menu__route--active" : "tasks-menu__route";
+
+	interface currentTaskList {
+		task: string,
+		complete: boolean,
+	}
+
+	let testTask : currentTaskList = {
+		task: 'Test Task 1',
+		complete: false,
+	}
+
+	let [taskList, addNewtask] = useState([testTask]);
 
 	return (
 		<div className="tasks-menu">

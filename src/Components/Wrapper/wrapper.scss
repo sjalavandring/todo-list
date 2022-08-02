@@ -56,6 +56,16 @@
   }
 }
 
+.custom-checkbox--checked {
+  @extend .custom-checkbox;
+  &:before {
+    visibility: hidden;
+  }
+  &:after {
+    visibility: hidden;
+  }
+}
+
 .tasks-menu {
   display: flex;
   justify-content: space-between;
@@ -71,6 +81,11 @@
   align-items: center;
   border-bottom: 1px solid #ddd;
   padding: 20px 15px;
+}
+
+.tasks-list-elem--completed {
+  @extend .tasks-list-elem;
+  text-decoration: line-through;
 }
 
 .tasks-list-elem__item {
