@@ -12,11 +12,29 @@
   box-shadow: 0px 5px 33px 8px rgba(34, 60, 80, 0.29);
 }
 
+.task-search-field {
+  display: flex;
+  border-bottom: 1px solid #000;
+}
+
+
 .tasks-input {
   width: 100%;
-  border-bottom: 1px solid #000;
   padding: 20px 15px;
   font-size: 20px;
+  outline: none;
+}
+
+.task-input__image {
+  max-height: 40px;
+  align-self: center;
+  margin-right: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    transform: scale(1.15);
+    transition: 0.2s;
+  }
 }
 
 .custom-checkbox {
@@ -25,10 +43,10 @@
   outline: 1px solid #000;
   border-radius: 30px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.3s;
   &:hover {
     transform: scale(1.05);
-    transition: 0.2s;
+    transition: 0.3s;
   }
   &:before{
     content: "";

@@ -1,6 +1,6 @@
 import {ReactNode, useState}  from 'react'
 
-type TaskProps = {
+interface TaskProps  {
 	taskText : string;
 }
 
