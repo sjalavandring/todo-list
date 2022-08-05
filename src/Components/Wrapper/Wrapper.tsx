@@ -10,11 +10,29 @@ const AllTasks = React.lazy(() => import('./../Tasks/AllTasks'));
 const ActiveTasks = React.lazy(() => import('./../Tasks/ActiveTasks'));
 const CompletedTasks = React.lazy(() => import('./../Tasks/CompletedTasks'));
 
-
-
+function NothingFound () {
+	return (
+		<div className="task-list-empty">Тут пока пусто</div>
+	)
+}
 
 function Wrapper () {
+	let [taskList, setTaskList] = useState<taskInfo[]>([{
+				"id": 1,
+				"taskText" : 'stts'
+			}]);
+	let inputInner = useRef<HTMLInputElement>(null);
 
+	// function checkboxToggler() {
+	// 	(taskList1) => {
+
+	// 	}
+	// }
+
+	// React.useEffect(() => {
+	// 	checkboxToggler()
+	// 	console.log(taskList)
+	// }, [])
 
 	let Navigation: React.FC<taskList> = function ({taskList}) {
 		let setActive = ({isActive} : {isActive: boolean}) => isActive ? "tasks-menu__route--active" : "tasks-menu__route";
@@ -27,43 +45,63 @@ function Wrapper () {
 					<NavLink className={setActive} to="/completed">Completed</NavLink>
 				</div>
 				<div className="tasks-menu-reset tasks-menu-elem">
-					<button className="tasks-menu-reset__button">clear all</button>
+					<button className="tasks-menu-reset__button" onClick={clearTaskList}>Clear all</button>
 				</div>
 			</div>
 		)
 	}
 
-	let testTask : taskInfo = {
-		taskText: 'Test Task 1',
-		completed: false,
-	}
-
-	let [taskList, addNewTask] = useState([testTask]);
-	let inputInner = useRef<HTMLInputElement>(null);
-
 	function addTask () {	
 		if (inputInner.current != null ) {
 			if (inputInner.current.value != "") {
-				addNewTask([{"taskText": inputInner.current.value}, ...taskList])
-				console.log(inputInner.current.value)
+				setTaskList([{"id": taskList.length, "taskText": inputInner.current.value}, ...taskList])
+				console.log(inputInner.current.value, taskList);
 				inputInner.current.value = "";
 			}	
 		}
 	}
-	
+
+	function clearTaskList () {
+		setTaskList([])
+	}
+
+	// function ToggleTaskStatus () {
+	// 	console.log(1)
+	// }
+
+	interface KeyEvent {
+		event: React.KeyboardEvent;
+	}
+
+	let inputHandler =  function ({event}: KeyEvent) {    //при фокусе на поле ввода нажатие на enter добавит новую задачу 
+		if (event.key == 'Enter') {
+			addTask();
+		}
+	}
+
+	function checkActiveTasks() {
+		let activeTasksCount: number = 0;
+		taskList.forEach ((task, id) => {
+			if (task.completed) {
+				activeTasksCount++;
+			}
+		})
+		return activeTasksCount;
+	}
+
 	return (
 		<main className="main">
 			<h1 className="main-title">ToDo List</h1>
 			<div className="main-wrapper">
 				<div className="task-search-field">
-					<input className="tasks-input" type="text" placeholder="Whats need to be done?" ref={inputInner} />
-					<img className="task-input__image" src={taskInputIcon} alt="taskInputIcon" onClick={addTask}/>
+					<input className="tasks-input" type="text" placeholder="Whats need to be done?" ref={inputInner} onKeyDown={(event) => inputHandler({event})}/>
+					<img className="task-input__image" src={taskInputIcon} alt="taskInputIcon" onClick={addTask} />
 				</div>
 				<div className="tasks-list">
 					<Suspense fallback={<div>Загрузка</div>}>
 				        <Routes>
-				        	<Route path="/" element={<AllTasks taskList={taskList}/>}/>
-					        <Route path="/active" element={<ActiveTasks />}/>
+				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks taskList={taskList}/>}/>
+					        <Route path="/active" element={checkActiveTasks() == 0 ? <NothingFound/> : <ActiveTasks />}/>
 					        <Route path="/completed" element={<CompletedTasks />}/>
 				        </Routes>
 			        </Suspense>

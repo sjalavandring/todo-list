@@ -2,9 +2,9 @@ import {taskList} from '../../interfaces/taskList'
 import {Task} from '../../index'
 
 let AllTasks: React.FC<taskList> = function  ({taskList}) {
-	let allTaskList = taskList.map((task, id) => {
+	let allTaskList = taskList.map((currentTask, id) => {
 		return (
-			<Task taskText={task.taskText}/>
+			<Task task={currentTask} />
 		)
 	})
 

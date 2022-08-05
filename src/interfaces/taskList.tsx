@@ -1,8 +1,9 @@
-export interface taskInfo {
+export type taskInfo = {
+	id: number,
 	taskText: string,
 	completed?: boolean,
 }
 
-export interface taskList  {
+export type taskList =  {
 	taskList: taskInfo[];
 }

@@ -38,8 +38,8 @@
 }
 
 .custom-checkbox {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   outline: 1px solid #000;
   border-radius: 30px;
   cursor: pointer;
@@ -52,8 +52,8 @@
     content: "";
     display: block;
     position: relative;
-    left: 8px;
-    top: 12px;
+    left: 6px;
+    top: 10px;
     width: 3px;
     height: 12px;
     border-radius: 10px;
@@ -64,8 +64,8 @@
     content: "";
     display: block;
     position: relative;
-    left:16px;
-    bottom: 7px;
+    left:14px;
+    bottom: 9px;
     width: 3px;
     height: 20px;
     border-radius: 10px;
@@ -92,6 +92,10 @@
 .tasks-list {
   height: 350px;
   overflow-y: auto;
+}
+
+.task-list-empty {
+  margin-top: 40px;
 }
 
 .tasks-list-elem {
@@ -128,4 +132,8 @@
 .tasks-menu-reset__button {
   width: 70px;
   height: 25px;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid #000;
+  }
 }

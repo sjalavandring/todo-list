@@ -1,10 +1,11 @@
 import {ReactNode, useState}  from 'react'
+import {taskInfo} from  '../../interfaces/taskList'
 
-interface TaskProps  {
-	taskText : string;
+type TaskProps = {
+	task : taskInfo;
 }
 
-let Task : React.FC<TaskProps> =  function Taskhandler ({taskText}){
+let Task : React.FC<TaskProps> =  function Taskhandler ({task}){
 	let [taskCompleteStatus , setTaskStatus] = useState(false)
 	function checkboxToggler(): void  {
 		setTaskStatus(true)
@@ -13,7 +14,7 @@ let Task : React.FC<TaskProps> =  function Taskhandler ({taskText}){
 	return (
 		<div className={taskCompleteStatus ? "tasks-list-elem--completed" : "tasks-list-elem"}>
 			<button className={taskCompleteStatus ? "custom-checkbox" : "custom-checkbox--checked"} onClick={checkboxToggler}/>		
-			<div className="tasks-list-elem__item">{taskText}</div>
+			<div className="tasks-list-elem__item">{task.taskText}</div>
 		</div>
 	)
 }
