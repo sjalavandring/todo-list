@@ -1,14 +1,18 @@
 import {ReactNode, useState}  from 'react'
 import {taskInfo} from  '../../interfaces/taskList'
+import {useEffect} from 'react'
 
 type TaskProps = {
 	task : taskInfo;
+	ToggleTaskStatus: (id: number) => void;
 }
 
-let Task : React.FC<TaskProps> =  function Taskhandler ({task}){
+let Task : React.FC<TaskProps> =  function Taskhandler ({task, ToggleTaskStatus}){
 	let [taskCompleteStatus , setTaskStatus] = useState(false)
 	function checkboxToggler(): void  {
 		setTaskStatus(true)
+		ToggleTaskStatus(task.id)
+		console.log(task);
 	}
 
 	return (

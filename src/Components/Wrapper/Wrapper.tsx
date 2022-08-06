@@ -1,6 +1,6 @@
 import React, {Suspense, MouseEvent, useState, useRef} from 'react';
 import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom";
-import {taskList} from '../../interfaces/taskList'
+import {taskListInterface} from '../../interfaces/taskList'
 import {taskInfo} from '../../interfaces/taskList'
 
 import taskInputIcon from '../../img/task-input__arrow.png'
@@ -17,24 +17,22 @@ function NothingFound () {
 }
 
 function Wrapper () {
-	let [taskList, setTaskList] = useState<taskInfo[]>([{
-				"id": 1,
-				"taskText" : 'stts'
-			}]);
+	let [taskList, setTaskList] = useState<taskInfo[]>([]);
 	let inputInner = useRef<HTMLInputElement>(null);
 
-	// function checkboxToggler() {
-	// 	(taskList1) => {
-
-	// 	}
+	// interface TasksProps {
+	// 	taskList: taskInfo[];
+	// 	ToggleTaskStatus?: (id: number) => void;
 	// }
 
-	// React.useEffect(() => {
-	// 	checkboxToggler()
-	// 	console.log(taskList)
-	// }, [])
 
-	let Navigation: React.FC<taskList> = function ({taskList}) {
+	function ToggleTaskStatus (index: number): void {
+		let changedTaskList = taskList.map((task, id) => {
+			return task.id == index ? task.completed = true : task;
+		})
+	}
+
+	let Navigation: React.FC<taskListInterface> = function ({taskList}) {
 		let setActive = ({isActive} : {isActive: boolean}) => isActive ? "tasks-menu__route--active" : "tasks-menu__route";
 		return (
 			<div className="tasks-menu">
@@ -55,7 +53,6 @@ function Wrapper () {
 		if (inputInner.current != null ) {
 			if (inputInner.current.value != "") {
 				setTaskList([{"id": taskList.length, "taskText": inputInner.current.value}, ...taskList])
-				console.log(inputInner.current.value, taskList);
 				inputInner.current.value = "";
 			}	
 		}
@@ -65,9 +62,6 @@ function Wrapper () {
 		setTaskList([])
 	}
 
-	// function ToggleTaskStatus () {
-	// 	console.log(1)
-	// }
 
 	interface KeyEvent {
 		event: React.KeyboardEvent;
@@ -100,7 +94,7 @@ function Wrapper () {
 				<div className="tasks-list">
 					<Suspense fallback={<div>Загрузка</div>}>
 				        <Routes>
-				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks taskList={taskList}/>}/>
+				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
 					        <Route path="/active" element={checkActiveTasks() == 0 ? <NothingFound/> : <ActiveTasks />}/>
 					        <Route path="/completed" element={<CompletedTasks />}/>
 				        </Routes>

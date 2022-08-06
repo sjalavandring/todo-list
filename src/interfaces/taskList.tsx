@@ -4,6 +4,6 @@ export type taskInfo = {
 	completed?: boolean,
 }
 
-export type taskList =  {
+export type taskListInterface =  {
 	taskList: taskInfo[];
 }

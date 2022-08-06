@@ -1,10 +1,17 @@
-import {taskList} from '../../interfaces/taskList'
+import {taskListInterface} from '../../interfaces/taskList'
+import {taskInfo} from '../../interfaces/taskList'
 import {Task} from '../../index'
+import {useEffect} from 'react'
 
-let AllTasks: React.FC<taskList> = function  ({taskList}) {
+interface TasksProps {
+	taskList: taskInfo[];
+	ToggleTaskStatus: (id: number) => void;
+}
+
+let AllTasks: React.FC<TasksProps> = function  ({taskList, ToggleTaskStatus}) {
 	let allTaskList = taskList.map((currentTask, id) => {
 		return (
-			<Task task={currentTask} />
+			<Task task={currentTask} ToggleTaskStatus={ToggleTaskStatus} />
 		)
 	})
 
