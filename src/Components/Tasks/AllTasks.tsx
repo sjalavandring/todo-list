@@ -11,9 +11,10 @@ interface TasksProps {
 let AllTasks: React.FC<TasksProps> = function  ({taskList, ToggleTaskStatus}) {
 	let allTaskList = taskList.map((currentTask, id) => {
 		return (
-			<Task task={currentTask} ToggleTaskStatus={ToggleTaskStatus} />
+			<Task task={taskList[id]} ToggleTaskStatus={ToggleTaskStatus} />
 		)
 	})
+
 
 	return (
 		<>

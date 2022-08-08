@@ -8,16 +8,13 @@ type TaskProps = {
 }
 
 let Task : React.FC<TaskProps> =  function Taskhandler ({task, ToggleTaskStatus}){
-	let [taskCompleteStatus , setTaskStatus] = useState(false)
 	function checkboxToggler(): void  {
-		setTaskStatus(true)
 		ToggleTaskStatus(task.id)
-		console.log(task);
 	}
 
 	return (
-		<div className={taskCompleteStatus ? "tasks-list-elem--completed" : "tasks-list-elem"}>
-			<button className={taskCompleteStatus ? "custom-checkbox" : "custom-checkbox--checked"} onClick={checkboxToggler}/>		
+		<div className={task.completed == true  ? "tasks-list-elem--completed" : "tasks-list-elem"}>
+			<button className={task.completed == true ? "custom-checkbox" : "custom-checkbox--checked"} onClick={checkboxToggler}/>		
 			<div className="tasks-list-elem__item">{task.taskText}</div>
 		</div>
 	)

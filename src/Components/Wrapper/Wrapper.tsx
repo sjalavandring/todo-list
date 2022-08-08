@@ -1,4 +1,4 @@
-import React, {Suspense, MouseEvent, useState, useRef} from 'react';
+import React, {Suspense, MouseEvent, useState, useRef, useEffect} from 'react';
 import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom";
 import {taskListInterface} from '../../interfaces/taskList'
 import {taskInfo} from '../../interfaces/taskList'
@@ -20,16 +20,11 @@ function Wrapper () {
 	let [taskList, setTaskList] = useState<taskInfo[]>([]);
 	let inputInner = useRef<HTMLInputElement>(null);
 
-	// interface TasksProps {
-	// 	taskList: taskInfo[];
-	// 	ToggleTaskStatus?: (id: number) => void;
-	// }
-
-
 	function ToggleTaskStatus (index: number): void {
 		let changedTaskList = taskList.map((task, id) => {
-			return task.id == index ? task.completed = true : task;
+			return (task.id == index ? {"id": task.id, "taskText": task.taskText, "completed": !taskList[id].completed} : task );
 		})
+		setTaskList(changedTaskList);
 	}
 
 	let Navigation: React.FC<taskListInterface> = function ({taskList}) {
@@ -52,11 +47,16 @@ function Wrapper () {
 	function addTask () {	
 		if (inputInner.current != null ) {
 			if (inputInner.current.value != "") {
-				setTaskList([{"id": taskList.length, "taskText": inputInner.current.value}, ...taskList])
+				setTaskList([{"id": taskList.length, "taskText": inputInner.current.value}, ...taskList,])
 				inputInner.current.value = "";
+
 			}	
 		}
 	}
+
+	useEffect(() => {
+		console.log(taskList)
+	}, [taskList])
 
 	function clearTaskList () {
 		setTaskList([])
