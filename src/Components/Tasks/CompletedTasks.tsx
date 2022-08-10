@@ -1,14 +1,20 @@
-function CompletedTasks () {
+import {taskInfo, taskProps} from '../../interfaces/taskList'
+import {Task} from '../../index'
+
+
+let CompletedTasks: React.FC<taskProps> = function ({taskList, ToggleTaskStatus}) {
+	let completedTaskList = taskList.map((currentTask, id) => {
+		if (taskList[id].completed) {
+			return (
+				<Task task={taskList[id]} ToggleTaskStatus={ToggleTaskStatus} />
+			)
+		} else return null
+	})
+
+
 	return (
 		<>
-			<div className="tasks-list-elem">
-				<button className="custom-checkbox"></button>	
-				<div className="tasks-list-elem__item">Task 1</div>
-			</div>
-			<div className="tasks-list-elem">
-				<button className="custom-checkbox"/>		
-				<div className="tasks-list-elem__item">Task 2</div>
-			</div>
+			{completedTaskList}
 		</>
 	)
 }

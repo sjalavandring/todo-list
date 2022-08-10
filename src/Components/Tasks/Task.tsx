@@ -1,5 +1,5 @@
 import {ReactNode, useState}  from 'react'
-import {taskInfo} from  '../../interfaces/taskList'
+import {taskInfo}  from  '../../interfaces/taskList'
 import {useEffect} from 'react'
 
 type TaskProps = {

@@ -73,7 +73,7 @@ function Wrapper () {
 		}
 	}
 
-	function checkActiveTasks() {
+	function checkCompletedTasks() {
 		let activeTasksCount: number = 0;
 		taskList.forEach ((task, id) => {
 			if (task.completed) {
@@ -95,8 +95,8 @@ function Wrapper () {
 					<Suspense fallback={<div>Загрузка</div>}>
 				        <Routes>
 				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
-					        <Route path="/active" element={checkActiveTasks() == 0 ? <NothingFound/> : <ActiveTasks />}/>
-					        <Route path="/completed" element={<CompletedTasks />}/>
+					        <Route path="/active" element={checkCompletedTasks() == 0 ? <NothingFound/> : <ActiveTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
+					        <Route path="/completed" element={checkCompletedTasks() != 0 ? <NothingFound/> : <CompletedTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
 				        </Routes>
 			        </Suspense>
 				</div>
