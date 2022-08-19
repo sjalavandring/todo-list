@@ -2,13 +2,15 @@ import React, {Suspense, MouseEvent, useState, useRef, useEffect} from 'react';
 import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom";
 import {taskListInterface} from '../../interfaces/taskList'
 import {taskInfo} from '../../interfaces/taskList'
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
 
 import taskInputIcon from '../../img/task-input__arrow.png'
-
 
 const AllTasks = React.lazy(() => import('./../Tasks/AllTasks'));
 const ActiveTasks = React.lazy(() => import('./../Tasks/ActiveTasks'));
 const CompletedTasks = React.lazy(() => import('./../Tasks/CompletedTasks'));
+
 
 function NothingFound () {
 	return (
@@ -19,6 +21,17 @@ function NothingFound () {
 function Wrapper () {
 	let [taskList, setTaskList] = useState<taskInfo[]>([]);
 	let inputInner = useRef<HTMLInputElement>(null);
+
+	const taskStateReducer = (state: any = taskList, action: any) => {
+		switch(action.type){
+			case "toggle":
+				return taskList.splice(action.id, 1, {...taskList[action.id], 'completed': true})
+			default:
+				return state;
+		}
+	}
+
+	const todoStore = createStore(taskStateReducer)
 
 	function ToggleTaskStatus (index: number): void {
 		let changedTaskList = taskList.map((task, id) => {
@@ -54,10 +67,6 @@ function Wrapper () {
 		}
 	}
 
-	useEffect(() => {
-		console.log(taskList)
-	}, [taskList])
-
 	function clearTaskList () {
 		setTaskList([])
 	}
@@ -84,25 +93,27 @@ function Wrapper () {
 	}
 
 	return (
-		<main className="main">
-			<h1 className="main-title">ToDo List</h1>
-			<div className="main-wrapper">
-				<div className="task-search-field">
-					<input className="tasks-input" type="text" placeholder="Whats need to be done?" ref={inputInner} onKeyDown={(event) => inputHandler({event})}/>
-					<img className="task-input__image" src={taskInputIcon} alt="taskInputIcon" onClick={addTask} />
+		<Provider store={todoStore}>
+			<main className="main">
+				<h1 className="main-title">ToDo List</h1>
+				<div className="main-wrapper">
+					<div className="task-search-field">
+						<input className="tasks-input" type="text" placeholder="Whats need to be done?" ref={inputInner} onKeyDown={(event) => inputHandler({event})}/>
+						<img className="task-input__image" src={taskInputIcon} alt="taskInputIcon" onClick={addTask} />
+					</div>
+					<div className="tasks-list">
+						<Suspense fallback={<div>Загрузка</div>}>
+					        <Routes>
+					        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
+						        <Route path="/active" element={checkCompletedTasks() == 0 ? <NothingFound/> : <ActiveTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
+						        <Route path="/completed" element={checkCompletedTasks() != 0 ? <NothingFound/> : <CompletedTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
+					        </Routes>
+				        </Suspense>
+					</div>
+					<Navigation taskList={taskList}/>
 				</div>
-				<div className="tasks-list">
-					<Suspense fallback={<div>Загрузка</div>}>
-				        <Routes>
-				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
-					        <Route path="/active" element={checkCompletedTasks() == 0 ? <NothingFound/> : <ActiveTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
-					        <Route path="/completed" element={checkCompletedTasks() != 0 ? <NothingFound/> : <CompletedTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
-				        </Routes>
-			        </Suspense>
-				</div>
-				<Navigation taskList={taskList}/>
-			</div>
-		</main>
+			</main>
+		</Provider>
 	)
 }
 
