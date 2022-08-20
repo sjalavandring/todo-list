@@ -8,6 +8,7 @@ export interface taskListInterface   {
 	taskList: taskInfo[];
 }
 
-export interface taskProps extends taskListInterface{
+export interface taskProps {
+	taskId?: number;
 	ToggleTaskStatus: (id: number) => void;
 }

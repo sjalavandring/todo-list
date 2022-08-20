@@ -1,12 +1,15 @@
 import {taskInfo, taskProps} from '../../interfaces/taskList'
 import {Task} from '../../index'
+import {useDispatch, useSelector} from 'react-redux'
 
 
-let CompletedTasks: React.FC<taskProps> = function ({taskList, ToggleTaskStatus}) {
-	let completedTaskList = taskList.map((currentTask, id) => {
+let CompletedTasks: React.FC = function () {
+	const taskList = useSelector((state: any) => state)
+	
+	let completedTaskList = taskList.map((currentTask: taskInfo[], id: number) => {
 		if (taskList[id].completed) {
 			return (
-				<Task task={taskList[id]} ToggleTaskStatus={ToggleTaskStatus} />
+				<Task taskId={id} />
 			)
 		} else return null
 	})

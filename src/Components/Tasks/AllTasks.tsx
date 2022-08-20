@@ -3,21 +3,13 @@ import {Task} from '../../index'
 import {useDispatch, useSelector} from 'react-redux'
 
 
-let AllTasks: React.FC<taskProps> = function  ({taskList, ToggleTaskStatus}) {
-	const dispatch = useDispatch()
-	const arr = useSelector((state: any) => state)
-	console.log(arr)
+let AllTasks: React.FC = function () {
+	const taskList = useSelector((state: any) => state)
+	console.log(taskList)
 
-	function changeReduxState(index: number): any{
-		dispatch({type: "toggle", id: index})
-	}
-
-
-	let allTaskList = taskList.map((currentTask, id) => {
+	let allTaskList = taskList.map((currentTask: taskInfo[], id: number) => {
 		return (
-			<div onClick={() => changeReduxState(id)}>
-				<Task task={taskList[id]} ToggleTaskStatus={ToggleTaskStatus} />
-			</div>
+			<Task taskId={id} key={id}/>
 		)
 	})
 

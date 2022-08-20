@@ -3,7 +3,7 @@ import {BrowserRouter, Routes, Route, NavLink} from "react-router-dom";
 import {taskListInterface} from '../../interfaces/taskList'
 import {taskInfo} from '../../interfaces/taskList'
 import {createStore} from 'redux'
-import {Provider} from 'react-redux'
+import {Provider, useDispatch, useSelector} from 'react-redux'
 
 import taskInputIcon from '../../img/task-input__arrow.png'
 
@@ -19,26 +19,27 @@ function NothingFound () {
 }
 
 function Wrapper () {
-	let [taskList, setTaskList] = useState<taskInfo[]>([]);
+	const taskList: taskInfo[] = useSelector((state: any) => state)
+
 	let inputInner = useRef<HTMLInputElement>(null);
 
-	const taskStateReducer = (state: any = taskList, action: any) => {
-		switch(action.type){
-			case "toggle":
-				return taskList.splice(action.id, 1, {...taskList[action.id], 'completed': true})
-			default:
-				return state;
-		}
-	}
+	// const taskStateReducer = (state: any = taskList, action?: any) => {
+	// 	switch(action.type){
+	// 		case "toggle":
+	// 			taskList.splice(action.id, 1, {...taskList[action.id], 'completed': !taskList[action.id].completed})
+	// 			console.log('task list', taskList)
+	// 			return taskList
+	// 		case 'change': 
+	// 			return taskList
+	// 		case 'clean': 
+	// 			return ([])
+	// 		default:
+	// 			return state;
+	// 	}
+	// }
 
-	const todoStore = createStore(taskStateReducer)
-
-	function ToggleTaskStatus (index: number): void {
-		let changedTaskList = taskList.map((task, id) => {
-			return (task.id == index ? {"id": task.id, "taskText": task.taskText, "completed": !taskList[id].completed} : task );
-		})
-		setTaskList(changedTaskList);
-	}
+	// const todoStore = createStore(taskStateReducer)
+	let dispatch = useDispatch()
 
 	let Navigation: React.FC<taskListInterface> = function ({taskList}) {
 		let setActive = ({isActive} : {isActive: boolean}) => isActive ? "tasks-menu__route--active" : "tasks-menu__route";
@@ -60,15 +61,15 @@ function Wrapper () {
 	function addTask () {	
 		if (inputInner.current != null ) {
 			if (inputInner.current.value != "") {
-				setTaskList([{"id": taskList.length, "taskText": inputInner.current.value}, ...taskList,])
+				// setTaskList([{"id": taskList.length, "taskText": inputInner.current.value}, ...taskList,])
+				dispatch({type: "add", text: inputInner.current.value})
 				inputInner.current.value = "";
-
 			}	
 		}
 	}
 
 	function clearTaskList () {
-		setTaskList([])
+		dispatch({type: 'clean'})
 	}
 
 
@@ -93,27 +94,25 @@ function Wrapper () {
 	}
 
 	return (
-		<Provider store={todoStore}>
-			<main className="main">
-				<h1 className="main-title">ToDo List</h1>
-				<div className="main-wrapper">
-					<div className="task-search-field">
-						<input className="tasks-input" type="text" placeholder="Whats need to be done?" ref={inputInner} onKeyDown={(event) => inputHandler({event})}/>
-						<img className="task-input__image" src={taskInputIcon} alt="taskInputIcon" onClick={addTask} />
-					</div>
-					<div className="tasks-list">
-						<Suspense fallback={<div>Загрузка</div>}>
-					        <Routes>
-					        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
-						        <Route path="/active" element={checkCompletedTasks() == 0 ? <NothingFound/> : <ActiveTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
-						        <Route path="/completed" element={checkCompletedTasks() != 0 ? <NothingFound/> : <CompletedTasks taskList={taskList} ToggleTaskStatus={ToggleTaskStatus}/>}/>
-					        </Routes>
-				        </Suspense>
-					</div>
-					<Navigation taskList={taskList}/>
+		<main className="main">
+			<h1 className="main-title">ToDo List</h1>
+			<div className="main-wrapper">
+				<div className="task-search-field">
+					<input className="tasks-input" type="text" placeholder="Whats need to be done?" ref={inputInner} onKeyDown={(event) => inputHandler({event})}/>
+					<img className="task-input__image" src={taskInputIcon} alt="taskInputIcon" onClick={addTask} />
 				</div>
-			</main>
-		</Provider>
+				<div className="tasks-list">
+					<Suspense fallback={<div>Загрузка</div>}>
+				        <Routes>
+				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks/>}/>
+					        <Route path="/active" element={checkCompletedTasks() == 0 ? <NothingFound/> : <ActiveTasks/>}/>
+					        <Route path="/completed" element={checkCompletedTasks() != 0 ? <NothingFound/> : <CompletedTasks/>}/>
+				        </Routes>
+			        </Suspense>
+				</div>
+				<Navigation taskList={taskList}/>
+			</div>
+		</main>
 	)
 }
 
