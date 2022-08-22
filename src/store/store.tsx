@@ -1,5 +1,6 @@
 import {createStore} from 'redux'
 import {taskInfo} from '../interfaces/taskList'
+import { composeWithDevTools } from '@redux-devtools/extension';
 // import {Provider, useDispatch} from 'react-redux'
 
 let taskList: taskInfo[] = ([]);
@@ -20,6 +21,6 @@ const taskStateReducer = (state: any = taskList, action: any) => {
 	}
 }
 
-const todoStore = createStore(taskStateReducer)
+const todoStore = createStore(taskStateReducer, composeWithDevTools())
 
 export {todoStore}
