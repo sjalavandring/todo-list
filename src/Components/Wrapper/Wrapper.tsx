@@ -23,22 +23,6 @@ function Wrapper () {
 
 	let inputInner = useRef<HTMLInputElement>(null);
 
-	// const taskStateReducer = (state: any = taskList, action?: any) => {
-	// 	switch(action.type){
-	// 		case "toggle":
-	// 			taskList.splice(action.id, 1, {...taskList[action.id], 'completed': !taskList[action.id].completed})
-	// 			console.log('task list', taskList)
-	// 			return taskList
-	// 		case 'change': 
-	// 			return taskList
-	// 		case 'clean': 
-	// 			return ([])
-	// 		default:
-	// 			return state;
-	// 	}
-	// }
-
-	// const todoStore = createStore(taskStateReducer)
 	let dispatch = useDispatch()
 
 	let Navigation: React.FC<taskListInterface> = function ({taskList}) {
@@ -83,7 +67,7 @@ function Wrapper () {
 		}
 	}
 
-	function checkCompletedTasks() {
+	function checkActiveTasks() {
 		let activeTasksCount: number = 0;
 		taskList.forEach ((task, id) => {
 			if (task.completed) {
@@ -105,8 +89,8 @@ function Wrapper () {
 					<Suspense fallback={<div>Загрузка</div>}>
 				        <Routes>
 				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks/>}/>
-					        <Route path="/active" element={checkCompletedTasks() == 0 ? <NothingFound/> : <ActiveTasks/>}/>
-					        <Route path="/completed" element={checkCompletedTasks() != 0 ? <NothingFound/> : <CompletedTasks/>}/>
+					        <Route path="/active" element={checkActiveTasks() != 0 ? <NothingFound/> : <ActiveTasks/>}/>
+					        <Route path="/completed" element={checkActiveTasks() == 0 ? <NothingFound/> : <CompletedTasks/>}/>
 				        </Routes>
 			        </Suspense>
 				</div>

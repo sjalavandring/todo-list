@@ -7,11 +7,8 @@ let Task : React.FC<{taskId: number}> =  function Taskhandler ({taskId}){
 	const dispatch = useDispatch()
 	let task = useSelector((state: any) => state[taskId])
 	let state = useSelector((state: any) => state)
-	console.log(state)
-	// console.log(task)
 	function changeReduxState(index: number): any{
 		dispatch({type: "toggle", id: index})
-		// console.log(task.completed)
 	}
 
 	return (
