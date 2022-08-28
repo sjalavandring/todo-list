@@ -70,11 +70,21 @@ function Wrapper () {
 	function checkActiveTasks() {
 		let activeTasksCount: number = 0;
 		taskList.forEach ((task, id) => {
-			if (task.completed) {
+			if (!task.completed) {
 				activeTasksCount++;
 			}
 		})
 		return activeTasksCount;
+	}
+
+	function checkCompletedTasks() {
+		let completedTasksCount: number = 0;
+		taskList.forEach ((task, id) => {
+			if (task.completed) {
+				completedTasksCount++;
+			}
+		})
+		return completedTasksCount;
 	}
 
 	return (
@@ -89,8 +99,8 @@ function Wrapper () {
 					<Suspense fallback={<div>Загрузка</div>}>
 				        <Routes>
 				        	<Route path="/" element={taskList.length == 0 ? <NothingFound/> : <AllTasks/>}/>
-					        <Route path="/active" element={checkActiveTasks() != 0 ? <NothingFound/> : <ActiveTasks/>}/>
-					        <Route path="/completed" element={checkActiveTasks() == 0 ? <NothingFound/> : <CompletedTasks/>}/>
+					        <Route path="/active" element={checkActiveTasks() == 0 ? <NothingFound/> : <ActiveTasks/>}/>
+					        <Route path="/completed" element={checkCompletedTasks() == 0 ? <NothingFound/> : <CompletedTasks/>}/>
 				        </Routes>
 			        </Suspense>
 				</div>

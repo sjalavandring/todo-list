@@ -5,6 +5,7 @@ import { composeWithDevTools } from '@redux-devtools/extension';
 
 let taskList: taskInfo[] = ([]);
 
+
 const taskStateReducer = (state: any = taskList, action: any) => {
 	switch(action.type){
 		case "toggle":

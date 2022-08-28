@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux'
 let ActiveTasks: React.FC = function () {
 	const taskList = useSelector((state: any) => state)
 	let activeTaskList = taskList.map((currentTask: taskInfo[], id: number) => {
-		if (taskList[id].completed != true) {
+		if (taskList[id].completed == undefined || taskList[id].completed == false) {
 			return (
 				<Task taskId={id} />
 			)
